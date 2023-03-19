@@ -13,11 +13,13 @@ module.exports = {
       .select("-__v")
       .populate("thoughts")
       .populate("friends")
-      .then((user) =>
-        !user
-          ? res.status(404).json({ message: "No User found with that ID!" })
-          : res.json(user)
-      )
+      .then(dbUserData => {
+        if (!dbUserData) {
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
+        }
+        res.json(dbUserData);
+    })
       .catch((err) => res.status(500).json(err));
   },
   //create a user
